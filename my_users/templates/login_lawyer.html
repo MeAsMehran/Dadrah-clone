@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    {% extends 'base.html' %}
+
+    {% block content %}
+
+
+        <div style="text-align: center">
+            {% if error %}
+            	{{ error }}
+            {% endif %}
+        </div>
+
+        <br>
+
+    	<div style="text-align: center">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div>
+                    <label for="lPhone">Phone: </label>
+                    <input name="phone" id="lPhone" type="text">
+                </div>
+                <br>
+                <div>
+                    <label for="lPassword">Password: </label>
+                    <input name="password" id="lPassword" type="password">
+                </div>
+                <br>
+                <div>
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+
+    {% endblock %}
+
+</body>
+</html>

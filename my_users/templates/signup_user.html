@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+    {% if user.is_authenticated %}
+    	{{ user.phone }}
+    {% endif %} 
+
+    <div style="text-align: center">
+        {% if error %}
+    	{{ error }}
+        {% endif %}
+    </div>
+
+    <br>
+
+    <style>
+    .hidden {
+      display: none;
+    }
+    .modal-content {
+      width: 30%;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      background-color: #fefefe;
+      text-align: center;
+      direction: rtl;
+    }
+    </style>
+</head>
+<body>
+
+
+    <div style="text-align: center">
+      <form method="post">
+          {% csrf_token %}
+        <label for="phoneNumber">Phone Number: </label>
+        <input type="tel" id="phoneNumber" name="phoneNumberInput" placeholder="09xx xxx xxxx" pattern="[0-9]{11}" required>
+        <br><br>
+{#        <button type="button" id="signupBtn">Send SMS</button>#}
+            <label for="firstPassword">Password: </label>
+            <input id="firstPassword" name="fPassword" type="password">
+            <br> <br>
+            <label for="secondPassword">Confirm Password: </label>
+            <input id="secondPassword" name="sPassword" type="password">
+            <br> <br>
+            <button type="submit">Sign Up</button>
+      </form>
+
+        <div style="text-align: center">
+            <h5>Already have an <a href="{% url 'users:loginPage' %}">account</a>?</h5>
+        </div>
+
+        <br> <br>
+
+        <!-- <form action="{% url 'users:signupPage' %}" method="post">
+
+        </form> -->
+        
+      <!-- Hidden Verification Input Field -->
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="modal-content hidden" id="verificationModal">
+                <p>Verification code sent to your phone</p>
+                <label for="verificationCode">Enter Verification Code:</label>
+                <input type="text" id="verificationCode" name="verificationCode" pattern="[0-9]{6}" placeholder="Enter code" required><br><br>
+                <button>Verify</button>
+            </div>
+        </form>
+
+    </div>
+
+{#    <form action="">#}
+{#        {% csrf_token %}#}
+{#        {{ form.as_p }}#}
+{#        <button type="submit">submit</button>#}
+{#    </form>#}
+
+{#    <script>#}
+{#        document.getElementById('smsButton').addEventListener('click', function() {#}
+{#            // Send SMS via an API call to the backend#}
+{#            fetch('/send-sms', {#}
+{#                method: 'POST',#}
+{#                headers: {#}
+{#                    'Content-Type': 'application/json',#}
+{#                },#}
+{#                body: JSON.stringify({ phoneNumber: '+989926233359' }) // Example phone number#}
+{#            })#}
+{#            .then(response => response.json())#}
+{#            .then(data => {#}
+{#                alert('SMS sent successfully!');#}
+{#            })#}
+{#            .catch((error) => {#}
+{#                console.error('Error:', error);#}
+{#            });#}
+{#        });#}
+{#    </script>#}
+
+{#    <script>#}
+{#      // Get the signup button and the verification modal#}
+{#      var signupBtn = document.getElementById('signupBtn');#}
+{#      var verificationModal = document.getElementById('verificationModal');#}
+{##}
+{#      // Add event listener to the signup button#}
+{#      signupBtn.addEventListener('click', function() {#}
+{#        var phoneInput = document.getElementById('phoneNumber').value;#}
+{##}
+{#        // Check if phone number is valid (basic check for length)#}
+{#        if(phoneInput.length === 10) {#}
+{#          // Show the verification modal when a valid phone number is entered#}
+{#          verificationModal.classList.remove('hidden');#}
+{#          alert("A verification code has been sent to your phone number.");#}
+{#        } else {#}
+{#          alert("Please enter a valid 11-digit phone number.");#}
+{#        }#}
+{#      });#}
+{#    </script>#}
+
+
+
+{% endblock %}
+
+</body>
+</html>

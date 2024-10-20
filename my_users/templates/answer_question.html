@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% extends 'base.html' %}
+{% block content %}
+
+
+    <div style="text-align: center">
+        {% if error %}
+        	<h5>{{ error }}</h5>
+        {% endif %}
+    </div>
+
+    <br>
+
+    <div style="text-align: center">
+        <div>
+            <h3>{{ question.title }}</h3>
+        </div>
+        <br>
+        <div>
+            <h5>{{ question.question_text }}</h5>
+        </div>
+    </div>
+
+
+    <div style="text-align: center">
+        <div>
+            <form action="{% url 'users:answerQuestion' question_pk %}" method="post">
+                {% csrf_token %}
+                <div>
+                    <label for="qAnswer">Answer: </label>
+                    <textarea id="qAnswer" name="aText" placeholder="جواب پرسش" cols="100" rows="10"></textarea>
+                </div>
+                <br>
+                <div>
+                    <button type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+</body>
+</html>

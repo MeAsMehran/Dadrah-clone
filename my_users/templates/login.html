@@ -1,0 +1,25 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if error %}
+        <br>
+    	{{ error }}
+    {% endif %}
+
+    <div style="text-align: center">
+        <form action="" method="post">
+            {% csrf_token %}
+            <label for="phoneNumber">Phone Number: </label>
+            <input id="phoneNumber" name="phoneNumberInput" placeholder="xxxx xxx xxxx" type="text">
+            <br> <br>
+            <label for="password">Password</label>
+            <input id="password" name="passwordInput"  type="password"> <br> <br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+
+
+{% endblock %}

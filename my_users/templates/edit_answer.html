@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% extends 'base.html' %}
+{% block content %}
+
+    <div style="text-align: center">
+
+        <form action="{% url 'users:editAnswer' answer_pk %}" method="post">
+            {% csrf_token %}
+            <div>
+                <label for="Atext"></label>
+                <textarea name="ansText" id="Atext" cols="100" rows="10" placeholder="جواب پرسش">{{ last_answer }}</textarea>
+            </div>
+            <br>
+            <div>
+                <button type="submit">Save</button>
+            </div>
+        </form>
+
+    </div>
+
+
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+{#if the user was logged in some features should be shown in the site like dashboard and etc#}
+
+
+    <h1 style="text-align: center">پرسش و پاسخ حقوقی رایگان</h1>
+
+    <p style="text-align: center;">دادراه خدمات مشاوره رایگان (پرسش و پاسخ حقوقی رایگان) خود را با هدف پاسخگویی
+        به نیاز مخاطبان به مشاوره های ساده و فوری ارائه می کند. سیاست دادراه این است که در کمترین زمان ممکن به سوالات کاربران پاسخ دهد.
+        سوالات کاربران در دسترس مشاوران و وکلای عضو دادراه قرار می گیرد و این وکلا و مشاوران می توانند نظر خود را ارائه نمایند.
+        تمام پرسش ها توسط کارکنان متخصص دادراه برچسب گذاری می شوند و به صورت عمومی منتشر می شوند، تا کاربران
+        دیگر نیز بتوانند در کمترین زمان سوالاتی که قبلاً پرسیده شده است را پیدا و مطالعه نمایند. از آن جا
+        که پرسش ها و پاسخ ها به صورت عمومی منتشر می شود، هر گونه مطالب توهین آمیز، یا
+        حاوی نام افراد حقیقی و حقوقی، آدرس، تلفن، ایمیل، وب سایت و لینک و ... حذف یا ویرایش می شود.
+        <br> <br>
+        .برای شروع مشاوره کافی است متن سوال خود را تایپ کرده و بر روی دکمه ارسال کلیک نمایید ☚</p>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <div style="text-align: center">
+            <div>
+                <input id="questionTitle" name="qTitle" placeholder="عنوان پرسش" maxlength="150" type="text">
+                <label for="questionTitle"></label>
+            </div>
+
+            <br>
+
+            <div>
+                <textarea id="questionText" name="qText" placeholder="متن پرسش" cols="100" rows="10"></textarea>
+                <label for="questionText"></label>
+            </div>
+            <br>
+            <div>
+                <button onclick="window.location.href='{% url 'users:signupPage' %}' ">ارسال پرسش</button>
+            </div>
+        </div>
+    </form>
+
+{#    <div style="text-align: center">#}
+{#        <form action="" method="post">#}
+{#            {% csrf_token %}#}
+{#            {{ form.as_p }}#}
+{#            <button type="submit">submit</button>#}
+{#        </form>#}
+{#    </div>#}
+
+
+
+    <body>
+        <div class="card" style="text-align: center">
+            <h1>آخرین پرسش ها و پاسخ ها</h1>
+            {% for q in questions %}
+                <div class="header">
+                <span class="title">{{ q.title }}</span> <br>
+                <span class="date">{{ q.date }}</span>
+                </div>
+                <div class="content">
+                <p>{{ q.question_text }}</p>
+                </div>
+
+{#                <div>#}
+{#                    <form action="{% url 'users:userAskedQuestionPage' question.id %}">#}
+{#                        {% csrf_token %}#}
+{#                        <button class="continue-btn">ادامه ی مطلب و پاسخ ها ...</button>#}
+{##}
+{#                    </form>#}
+{#                </div>#}
+                <br> <br>
+            {% endfor %}
+        </div>
+    </body>
+
+    <br>
+
+
+
+
+
+
+
+
+
+
+{#    {% for q in questions %}#}
+{#        {{ q.date }} <br>#}
+{#        {{ q.title }} <br>#}
+{#    	{{ q.question_text }}#}
+{#        <br> <br>#}
+{#    {% endfor %}#}
+
+
+
+
+
+
+
+
+{#    <!-- Button to open the modal -->#}
+{#    <button id="openModalBtn">ثبتنام</button>#}
+{##}
+{#    <!-- The Modal -->#}
+{#    <div id="myModal" class="modal" style="text-align: center">#}
+{#      <!-- Modal content -->#}
+{#      <div class="modal-content">#}
+{#        <span class="close">&times;</span>#}
+{#        <h2>ثبتنام</h2>#}
+{#        <p>For example, enter your phone number to register:</p>#}
+{#        <input type="text" placeholder="مثال: 09123456789">#}
+{#        <button>ورود</button>#}
+{#      </div>#}
+{#    </div>#}
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+</html>

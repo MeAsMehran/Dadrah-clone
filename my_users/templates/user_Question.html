@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <div><a href="{% url 'users:firstPage' %}">Questions' Page</a></div>
+    
+    <div style="text-align: center">
+        <div>
+             <h4>{{ question.title }}</h4> <br>
+             <p>{{ question.question_text }}</p> <br>
+             <h5>{{ question.date }}</h5>
+        </div>
+
+        <div>
+    {#        we check here if the current user is the one who asked this question(we do this inorder to users can change only their own question)#}
+            {% if is_owner %}
+    {#        	<button type="submit"><a href="{% url 'users:editQuestionPage' question.id %}">Edit the question</a></button>#}
+                <button onclick="window.location.href='{% url 'users:editQuestionPage' question.id %}' ">Edit</button>
+                <br> <br>
+                <button onclick="window.location.href='{% url 'users:deleteQuestion' question.id %}' ">Delete</button>
+            {% endif %}
+        </div>
+
+        <br>
+
+        <div>
+            {% if is_lawyer %}
+                <button onclick="window.location.href='{% url 'users:answerQuestion' question.id %}' ">Answer</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <br>
+
+    <div style="text-align: center">
+        <div>
+            {% for answer in answers %}
+            	{{ answer.answer }} <br>
+                {{ answer.time }} <br>
+
+{#                this if is for checking the current lawyer can only edit his or her answer.(edit button is available for those answer which the current lawyer had answered them)  #}
+                {% if answer.lawyer == current_lawyer %}
+                    <a href="{% url 'users:editAnswer' answer.id %}">Edit</a>
+                    <div>
+                        <form action="{% url 'users:deleteAnswer' answer.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" >Delete</button>
+                        </form>
+                    </div>
+                {% endif %}
+                <br> <br>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+</body>
+</html>
