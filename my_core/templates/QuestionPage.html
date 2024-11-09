@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    {% extends  'base.html' %}
+    {% block content %}
+
+        <div class="question" style="text-align: center">
+            <div class="title">
+                <h2>{{ question.title }}</h2>
+            </div>
+
+            <div class="date">
+                {{ question.date }}
+            </div>
+            <br>
+            <div class="text">
+                <p>{{ question.question_text }}</p>
+            </div>
+        </div>
+
+        <div class="answer" style="text-align: center">
+            {% for answer in answers %}
+            	<div class="a_text">
+                    {{ answer.answer }}
+                </div>
+                <br>
+                <div class="a_date">
+                    {{ answer.date }}
+                </div> <br>
+                <div class="a_lawyer">
+                    {{ answer.lawyer.user.username }}
+                </div> <br> <br> <br>
+            {% endfor %}
+        </div>
+
+
+
+
+
+    {% endblock %}
+</body>
+</html>

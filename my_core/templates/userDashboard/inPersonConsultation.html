@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>inPersonConsultation</title>
+</head>
+<body>
+
+    {% extends 'base.html' %}
+
+    {% block content %}
+
+{#        getting a in person consultation#}
+
+        <div class="phoneConsultation">
+            <button onclick="window.location.href='{% url 'users:phoneCon' %}' ">انتخاب وکیل و برقراری ارتباط</button>
+        </div>
+
+
+        {% for p in phone_cons %}
+            <div class="phone_cons">
+                <div>{{ p.city }}</div>
+                <div>{{ p.province }}</div>
+                <div>{{ p.subject }}</div>
+                <div>{{ p.date }}</div>
+                <div>{{ p.lawyer }}</div>
+            </div>
+        {% endfor %}
+
+
+
+{#        showing the in person consultation history#}
+
+
+
+    {% endblock %}
+
+</body>
+</html>

@@ -27,8 +27,11 @@ class InPersonConsultationUser(models.Model):
     province = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
     subject = models.CharField(max_length=1000)
+    date = models.DateField(auto_now_add=True, blank=False, null=True)
     # lawyer_id = models.ForeignKey('my_users.Lawyer', on_delete=models.CASCADE)
     # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    lawyer = models.ForeignKey('my_users.Lawyer', on_delete=models.CASCADE, null=True,blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
 
 class PhoneConsultationUser(models.Model):

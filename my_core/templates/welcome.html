@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="css/style.css">
+{#    <link rel="stylesheet" href="css/style.css">#}
     <title>Document</title>
 </head>
 
@@ -64,16 +64,29 @@
 
     <body>
         <div class="card" style="text-align: center">
-            <h1>آخرین پرسش ها و پاسخ ها</h1>
-            {% for q in questions %}
-                <div class="header">
-                <span class="title">{{ q.title }}</span> <br>
-                <span class="date">{{ q.date }}</span>
-                </div>
-                <div class="content">
-                <p>{{ q.question_text }}</p>
-                </div>
+            <form action="" method="post">
+                <h1>آخرین پرسش ها و پاسخ ها</h1>
+                {% for q in questions %}
+                <div class="questions">
+                    <div class="header">
+                        <div><h2>{{ q.title }}</h2></div> <br>
+                    </div>
 
+
+                    <div class="qDate">
+                        <div class="date">{{ q.date }}</div>
+                    </div>
+                    <br>
+
+                    <div class="content">
+                        <p>{{ q.question_text|safe|truncatewords:50 }}</p>
+                    </div>
+
+                    <div>
+                        <a target="_blank" class="btn btn-success" href="{% url 'core:viewQuestionPage' q.id %}" role="button">ادامه ی مطلب و پاسخ ها ...</a>
+    {#                        <button type="button" class="continue-btn"><a href="{% url 'users:userAskedQuestionPage'  %}">ادامه ی مطلب و پاسخ ها ...</a></button>#}
+                    </div>
+                </div>
 {#                <div>#}
 {#                    <form action="{% url 'users:userAskedQuestionPage' question.id %}">#}
 {#                        {% csrf_token %}#}
@@ -82,7 +95,9 @@
 {#                    </form>#}
 {#                </div>#}
                 <br> <br>
-            {% endfor %}
+                {% endfor %}
+            </form>
+
         </div>
     </body>
 

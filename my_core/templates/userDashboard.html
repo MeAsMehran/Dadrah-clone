@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>userDashboard</title>
+</head>
+<body>
+
+    {% extends 'base.html' %}
+
+    {% block content %} <br>
+        <div class="dashboard">
+            <div class="inPersonConsultation">
+                <button onclick="window.location.href='{% url 'users:inPersonCon' %}' ">مشاوره حضوری با وکیل</button>
+            </div>
+            <br>
+
+            <div class="phoneConsultation">
+                <button onclick="window.location.href='{% url 'users:phoneCon' %}' ">مشاوره تلفنی با وکیل</button>
+            </div>
+            <br>
+
+            <div class="degree">
+{#                <button onclick="window.location.href='{% url 'users:userDashboard' %}' ">بررسی مدارک</button>#}
+            </div>
+            <br>
+
+            <div class="userQuestions">
+{#                <button onclick="window.location.href='{% url 'users:userDashboard' %}' ">پرسش و پاسخ حقوقی رایگان</button>#}
+            </div>
+            <br>
+
+            <div class="support">
+{#                <button onclick="window.location.href='{% url 'users:userDashboard' %}' ">پشتیبانی</button>#}
+            </div>
+            <br>
+
+            <div class="comments">
+{#                <button onclick="window.location.href='{% url 'users:userDashboard' %}' ">نظرات شما</button>#}
+            </div>
+        </div>
+    {% endblock %}
+
+</body>
+</html>

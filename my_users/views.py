@@ -131,8 +131,9 @@ def sign_up_lawyer(request):
             login(request, created_user)
 
             return redirect('users:firstPage')
+
         except IntegrityError:
-            return render(request, 'signup_lawyer.html')
+            return render(request, 'signup_lawyer.html', {'error' : "Name is already existed. Enter unique name!"})
 
 
 
@@ -292,10 +293,16 @@ def user_question(request, question_pk):
     is_lawyer = hasattr(request.user, 'lawyer')
     if is_lawyer:
         current_lawyer = request.user.lawyer
+        # we pass the question and is_owner to html file
+        if request.method == "GET":
+            return render(request, 'user_Question.html',
+                          {'question': question, 'answers': question_answers, 'is_owner': is_owner,
+                           'is_lawyer': is_lawyer, 'current_lawyer': current_lawyer})
 
-    # we pass the question and is_owner to html file
-    if request.method == "GET":
-        return render(request, 'user_Question.html', {'question': question, 'answers' : question_answers, 'is_owner': is_owner, 'is_lawyer' : is_lawyer, 'current_lawyer' : current_lawyer})
+    else:
+        return render(request, 'user_Question.html',
+                      {'question': question, 'answers': question_answers, 'is_owner': is_owner,
+                       'is_lawyer': is_lawyer, })
     #
     # elif request.method == "POST":
     #     pass
@@ -374,6 +381,10 @@ def delete_answer(request, answer_pk):
         answer = get_object_or_404(models.Answer, pk=answer_pk)
         answer.delete()
         return redirect('users:userAskedQuestionPage', answer.question_ans.id)
+
+
+
+
 
 
 

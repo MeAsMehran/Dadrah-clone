@@ -17,7 +17,9 @@
             {% csrf_token %}
             <button type="submit">Logout</button>
         </form>
-
+        <br>
+        <button onclick="window.location.href='{% url 'users:dashboard' %}' ">Dashboard</button>
+{#        <a href="{% url 'users:userDashboard' %}">Dashboard</a>#}
         <br> <br>
 
     {% else %}

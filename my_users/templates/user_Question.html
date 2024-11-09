@@ -44,15 +44,16 @@
         <div>
             {% for answer in answers %}
             	{{ answer.answer }} <br>
-                {{ answer.time }} <br>
+                {{ answer.time }} <br> <br>
+                {{ answer.lawyer.user.username }} <br> <br>
 
 {#                this if is for checking the current lawyer can only edit his or her answer.(edit button is available for those answer which the current lawyer had answered them)  #}
                 {% if answer.lawyer == current_lawyer %}
-                    <a href="{% url 'users:editAnswer' answer.id %}">Edit</a>
+                    <a href="{% url 'users:editAnswer' answer.id %}">Edit</a> <br> <br>
                     <div>
                         <form action="{% url 'users:deleteAnswer' answer.id %}" method="post">
                             {% csrf_token %}
-                            <button type="submit" >Delete</button>
+                            <button type="submit">Delete</button>
                         </form>
                     </div>
                 {% endif %}

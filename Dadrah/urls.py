@@ -26,6 +26,7 @@ urlpatterns = [
     path('', core_view.welcome, name='welcomePage'),
     path('admin/', admin.site.urls),
     path('user/', include('my_users.urls'), name='userPage'),
+    path('', include('my_core.urls'), name='view'),
     ]
 
 

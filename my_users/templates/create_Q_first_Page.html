@@ -77,19 +77,28 @@
         <div class="card" style="text-align: center">
             <h1>آخرین پرسش ها و پاسخ ها</h1>
             {% for q in questions %}
-                <div class="header">
-                <span class="title">{{ q.title }}</span> <br>
-                <span class="date">{{ q.date }}</span>
-                </div>
-                <div class="content">
-                <p>{{ q.question_text }}</p>
-                </div> <br>
+                <div class="questions">
+                    <div class="header">
+                        <div class="title">{{ q.title }}</div>
+                    </div>
 
-                <div>
-                    <a target="_blank" class="btn btn-success" href="{% url 'users:userAskedQuestionPage' q.id %}" role="button">ادامه ی مطلب و پاسخ ها ...</a>
-{#                        <button type="button" class="continue-btn"><a href="{% url 'users:userAskedQuestionPage'  %}">ادامه ی مطلب و پاسخ ها ...</a></button>#}
+                    <br>
+                    <div class="qDate">
+                        <span class="date">{{ q.date }}</span>
+                    </div>
+
+                    <br>
+                    <div class="content">
+                        <p>{{ q.question_text|safe|truncatewords:50 }}</p>
+                    </div> <br>
+
+                    <div>
+                        <a target="_blank" class="btn btn-success" href="{% url 'users:userAskedQuestionPage' q.id %}" role="button">ادامه ی مطلب و پاسخ ها ...</a>
+    {#                        <button type="button" class="continue-btn"><a href="{% url 'users:userAskedQuestionPage'  %}">ادامه ی مطلب و پاسخ ها ...</a></button>#}
+                    </div>
+                    <br> <br>
                 </div>
-                <br> <br>
+
             {% endfor %}
 
 {#        {{ question.title }} + d#}
