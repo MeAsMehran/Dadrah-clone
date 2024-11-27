@@ -15,6 +15,7 @@ from my_core import models
 from .forms import QuestionForm
 from django.contrib.auth.decorators import login_required
 from .forms import SignupLawyerForm
+from django.db.models import Avg
 
 # Create your views here.
 
@@ -279,33 +280,62 @@ def delete_question(request, question_pk):
 
 @login_required
 def user_question(request, question_pk):
-    # question = get_object_or_404(models.Question, pk=question_pk, user_id=request.user)
-    question = get_object_or_404(models.Question, pk=question_pk)   # we want to make sure everybody can see others questions but only the created-user can edit own question
+    question = get_object_or_404(models.Question, pk=question_pk)
     question_answers = models.Answer.objects.filter(question_ans=question)
-
-    is_owner = request.user.id == question.user.id   # we check here if the current user is the one who asked this question(we do this inorder to users can change only their own question)
-
-
-    # hasattr() is a built-in Python function used to check if an object has a specified attribute.
-    # The function returns True if the object has the attribute, and False otherwise.
-    # object: The object to check.
-    # 'attribute': The name of the attribute as a string.
+    is_owner = request.user.id == question.user.id
     is_lawyer = hasattr(request.user, 'lawyer')
-    if is_lawyer:
-        current_lawyer = request.user.lawyer
-        # we pass the question and is_owner to html file
-        if request.method == "GET":
-            return render(request, 'user_Question.html',
-                          {'question': question, 'answers': question_answers, 'is_owner': is_owner,
-                           'is_lawyer': is_lawyer, 'current_lawyer': current_lawyer})
 
-    else:
-        return render(request, 'user_Question.html',
-                      {'question': question, 'answers': question_answers, 'is_owner': is_owner,
-                       'is_lawyer': is_lawyer, })
+    context = {
+        'question': question,
+        'answers': question_answers,
+        'is_owner': is_owner,
+        'is_lawyer': is_lawyer
+    }
+
+    if is_lawyer:
+        context['current_lawyer'] = request.user.lawyer
+
+    return render(request, 'user_Question.html', context)
+
+from my_core.models import Answer, Rating
+
+def rate_answer(request, answer_pk):
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        answer = get_object_or_404(Answer, pk=answer_pk)
+
+        # Check if the user has already rated this answer
+        existing_rating = Rating.objects.filter(answer=answer, user=request.user).first()
+        if existing_rating:
+            # Return an error if the user has already rated this answer
+            return JsonResponse({'error': 'You have already rated this answer.'}, status=400)
+
+        # Handle saving the rating if the user hasn't rated yet
+        Rating.objects.create(
+            answer=answer, user=request.user, rating=rating
+        )
+
+        # Calculate the new average rating for the answer
+        avg_rating = answer.ratings.aggregate(Avg('rating'))['rating__avg'] or 0
+        return JsonResponse({'average_rating': avg_rating})
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+    # if request.method == 'POST':
+    #     rating = request.POST.get('rating')
+    #     answer = get_object_or_404(Answer, pk=answer_pk)
     #
-    # elif request.method == "POST":
-    #     pass
+    #     # Handle saving or updating the rating
+    #     Rating.objects.update_or_create(
+    #         answer=answer, user=request.user,
+    #         defaults={'rating': rating}
+    #     )
+    #
+    #     # Calculate the new average rating for the answer
+    #     avg_rating = answer.ratings.aggregate(Avg('rating'))['rating__avg'] or 0
+    #     return JsonResponse({'average_rating': avg_rating})
+    # return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 

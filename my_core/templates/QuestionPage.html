@@ -25,6 +25,7 @@
 
         <div class="answer" style="text-align: center">
             {% for answer in answers %}
+                <div class="lines"> <p><< ------------------------------------ >></p> </div>
             	<div class="a_text">
                     {{ answer.answer }}
                 </div>
@@ -34,7 +35,11 @@
                 </div> <br>
                 <div class="a_lawyer">
                     {{ answer.lawyer.user.username }}
-                </div> <br> <br> <br>
+                </div>
+                <div class="a_rating">
+                    <h4>Rate: {{ answer.average_rating }}</h4>
+                </div>
+                <br> <br> <br>
             {% endfor %}
         </div>
 

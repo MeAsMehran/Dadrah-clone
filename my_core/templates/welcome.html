@@ -82,7 +82,7 @@
                         <p>{{ q.question_text|safe|truncatewords:50 }}</p>
                     </div>
 
-                    <div>
+                    <div class="q_url">
                         <a target="_blank" class="btn btn-success" href="{% url 'core:viewQuestionPage' q.id %}" role="button">ادامه ی مطلب و پاسخ ها ...</a>
     {#                        <button type="button" class="continue-btn"><a href="{% url 'users:userAskedQuestionPage'  %}">ادامه ی مطلب و پاسخ ها ...</a></button>#}
                     </div>

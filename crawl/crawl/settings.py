@@ -12,6 +12,22 @@ BOT_NAME = "crawl"
 SPIDER_MODULES = ["crawl.spiders"]
 NEWSPIDER_MODULE = "crawl.spiders"
 
+#=======================================================
+import sys
+import os
+
+# Add the Django project directory to PYTHONPATH
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(BASE_DIR)
+
+# Set Django settings module
+os.environ['DJANGO_SETTINGS_MODULE'] = 'Dadrah.settings'
+
+# Initialize Django
+import django
+django.setup()
+#========================================================
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "crawl (+http://www.yourdomain.com)"

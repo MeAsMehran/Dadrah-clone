@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from my_users.models import Lawyer
+from my_core import models
 
 # Register your models here.
 

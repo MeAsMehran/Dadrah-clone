@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+
 </head>
 <body>
 
@@ -43,9 +44,45 @@
     <div style="text-align: center">
         <div>
             {% for answer in answers %}
+                <p><< ------------------------------- >></p>
             	{{ answer.answer }} <br>
                 {{ answer.time }} <br> <br>
                 {{ answer.lawyer.user.username }} <br> <br>
+
+                <!-- Star Rating Section -->
+
+{#                <div class="star-rating" data-answer-id="{{ answer.id }}">#}
+{#                    rate:#}
+{#                    {% for star in "12345" %}#}
+{#                        <span class="star" data-value="{{ star }}">★</span>#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#                <p class="average-rating">Average Rating: {{ answer.average_rating|floatformat:1 }}</p>#}
+                <p class="average-rating" data-answer-id="{{ answer.pk }}">Average Rating: {{ answer.average_rating|floatformat:1 }}</p>
+
+                {% if user.is_authenticated %}
+                <form method="POST" action="{% url 'users:rate_answer' answer.pk %}">
+                    {% csrf_token %}
+                    <div class="radio-rating" data-answer-id="{{ answer.pk }}">
+                        <label for="rating">Rate this answer:</label>
+                        <input type="radio" name="rating" value="1" id="rating_1_{{ answer.pk }}"> 1
+                        <input type="radio" name="rating" value="2" id="rating_2_{{ answer.pk }}"> 2
+                        <input type="radio" name="rating" value="3" id="rating_3_{{ answer.pk }}"> 3
+                        <input type="radio" name="rating" value="4" id="rating_4_{{ answer.pk }}"> 4
+                        <input type="radio" name="rating" value="5" id="rating_5_{{ answer.pk }}"> 5
+{#                        <button type="submit">Submit Rating</button>#}
+                    </div>
+                    <br>
+
+{#                    <button onclick="submitRating({{ answer.pk }})">Submit Rating</button>#}
+                    <button class="submit-rating" data-answer-id="{{ answer.pk }}">Submit Rating</button>
+{#                    <p class="average-rating" data-answer-id="{{ answer.pk }}">Average Rating: {{ answer.average_rating|floatformat:1 }}</p>#}
+
+                </form>
+
+                {% else %}
+                    <p>You need to be logged in to rate this answer.</p>
+                {% endif %}
 
 {#                this if is for checking the current lawyer can only edit his or her answer.(edit button is available for those answer which the current lawyer had answered them)  #}
                 {% if answer.lawyer == current_lawyer %}
@@ -57,13 +94,148 @@
                         </form>
                     </div>
                 {% endif %}
+
                 <br> <br>
             {% endfor %}
+
+        <style>
+            .star-rating {
+                font-size: 24px;
+                color: gray;
+            }
+            .star-rating .star {
+                cursor: pointer;
+                color: gray;
+            }
+            .star-rating .star.selected {
+                color: gold;
+            }
+        </style>
+
+        <style>
+            .radio-rating input[type="radio"] {
+                margin-right: 5px;
+            }
+        </style>
+
 
         </div>
     </div>
 {% endblock %}
 
+
+
+<script>
+    document.querySelectorAll(".submit-rating").forEach(button => {
+        button.addEventListener("click", function(event) {
+            event.preventDefault();  // Prevent form submission
+
+            const answerId = button.getAttribute("data-answer-id");
+            const selectedRating = document.querySelector(`input[name="rating"][data-answer-id="${answerId}"]:checked`);
+
+            if (!selectedRating) {
+                alert("Please select a rating before submitting.");
+                return;
+            }
+
+            const ratingValue = selectedRating.value;
+            const csrfToken = document.querySelector(`form[data-answer-id="${answerId}"] input[name='csrfmiddlewaretoken']`).value;
+
+            fetch(`/rate_answer/${answerId}/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrfToken
+                },
+                body: JSON.stringify({ rating: ratingValue })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.average_rating) {
+                    alert("Rating submitted successfully! New average rating: " + data.average_rating);
+                    document.querySelector(`.average-rating[data-answer-id="${answerId}"]`).textContent = "Average Rating: " + data.average_rating;
+                } else {
+                    alert("An error occurred: " + data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+{#<script>#}
+{#    document.addEventListener("DOMContentLoaded", function () {#}
+{#    function getCSRFToken() {#}
+{#        let cookieValue = null;#}
+{#        if (document.cookie && document.cookie !== '') {#}
+{#            const cookies = document.cookie.split(';');#}
+{#            for (let i = 0; i < cookies.length; i++) {#}
+{#                const cookie = cookies[i].trim();#}
+{#                if (cookie.substring(0, "csrftoken".length + 1) === ("csrftoken" + '=')) {#}
+{#                    cookieValue = decodeURIComponent(cookie.substring("csrftoken".length + 1));#}
+{#                    break;#}
+{#                }#}
+{#            }#}
+{#        }#}
+{#        return cookieValue;#}
+{#    }#}
+{##}
+{#    const csrfToken = getCSRFToken();#}
+{##}
+{#    document.querySelectorAll(".star-rating").forEach(ratingContainer => {#}
+{#        const answerId = ratingContainer.getAttribute("data-answer-id");#}
+{#        const stars = ratingContainer.querySelectorAll(".star");#}
+{##}
+{#        stars.forEach(star => {#}
+{#            star.addEventListener("click", function () {#}
+{#                const ratingValue = this.getAttribute("data-value");#}
+{##}
+{#                // Clear previous selection#}
+{#                stars.forEach(s => s.classList.remove("selected"));#}
+{##}
+{#                // Highlight selected stars#}
+{#                for (let i = 0; i < ratingValue; i++) {#}
+{#                    stars[i].classList.add("selected");#}
+{#                }#}
+{##}
+{#                // Send AJAX request to rate the answer#}
+{#                fetch(`/rate_answer/${answerId}/`, {#}
+{#                    method: "POST",#}
+{#                    headers: {#}
+{#                        "X-CSRFToken": csrfToken,#}
+{#                        "Content-Type": "application/json",#}
+{#                    },#}
+{#                    body: JSON.stringify({ rating: ratingValue }),#}
+{#                })#}
+{#                .then(response => response.json())#}
+{#                .then(data => {#}
+{#                    if (data.message) {#}
+{#                        alert(data.message);#}
+{#                        // Update average rating in the DOM#}
+{#                        const avgRatingElement = ratingContainer.querySelector(".average-rating");#}
+{#                        avgRatingElement.textContent = `Average Rating: ${data.average_rating}`;#}
+{#                    } else if (data.error) {#}
+{#                        alert(data.error);#}
+{#                    }#}
+{#                })#}
+{#                .catch(error => console.error("Error:", error));#}
+{#            });#}
+{#        });#}
+{#    });#}
+{#});#}
+{##}
+{#</script>#}
+
+{#</form>#}
 
 
 

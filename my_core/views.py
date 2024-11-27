@@ -25,10 +25,14 @@ def welcome(request):
 def view_questions(request, question_pk):
     question = get_object_or_404(models.Question, pk=question_pk)
     answers = models.Answer.objects.filter(question_ans=question)
-
+    # answers = sorted(answers, key=get_answer_rating(answers))
+    answers = sorted(answers, key=get_answer_rating, reverse=True)
 
     if request.method == "GET":
         return render(request, 'QuestionPage.html', {'question' : question, 'answers' : answers})
+
+def get_answer_rating(answer):
+    return answer.average_rating()
 
 
 @login_required

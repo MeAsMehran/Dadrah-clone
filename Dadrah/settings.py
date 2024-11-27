@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'my_core',
     'my_users',
+    'crawl_scrape',
+
 ]
 
 MIDDLEWARE = [
@@ -76,10 +78,24 @@ WSGI_APPLICATION = 'Dadrah.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
+
+    # django default database:
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    } ,
+
+
+    # Adding database for crawled data from site:
+    'crawler_db': {
+        'ENGINE': 'django.db.backends.postgresql' ,
+        'NAME': 'dadrah_database' ,
+        'USER': 'postgres' ,
+        'PASSWORD': 'admin' ,
+        'HOST': 'localhost' ,
+        'PORT': '5432',
     }
+
 }
 
 

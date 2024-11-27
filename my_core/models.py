@@ -1,7 +1,8 @@
 from django.db import models
 from my_users.models import NormalUser, Lawyer
 from django.contrib.auth.models import User
-
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
@@ -92,10 +93,41 @@ class Answer(models.Model):
     # lawyer = models.ForeignKey('my_users.Lawyer',related_name='answer', on_delete=models.CASCADE, default=)
     lawyer = models.ForeignKey('my_users.Lawyer', related_name='answer', on_delete=models.CASCADE, null=True, blank=True)
     question_ans = models.ForeignKey(Question, on_delete=models.CASCADE, )
+    # rate = models.IntegerField(default=0, blank=True, null=True)
+    def average_rating(self):
+        ratings = self.ratings.all()
+        total_ratings = ratings.count()  # Get the count of ratings
+
+        if total_ratings > 0:
+            # Calculate average if there are ratings
+            return round(sum(rating.rating for rating in ratings) / total_ratings, 1)
+        else:
+            # Return 0 if there are no ratings
+            return 0
+
+        # return sum(rating.rating for rating in ratings) / ratings.count() if ratings.exists() else 0
 
     def __str__(self):
         return self.answer
 
+
+class Rating(models.Model):
+    class StarRating(models.IntegerChoices):
+        ONE = 1, _('1 Star')
+        TWO = 2, _('2 Stars')
+        THREE = 3, _('3 Stars')
+        FOUR = 4, _('4 Stars')
+        FIVE = 5, _('5 Stars')
+
+    answer = models.ForeignKey(Answer, related_name='ratings', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=StarRating.choices)
+
+    class Meta:
+        unique_together = ('answer', 'user')
+
+    def __str__(self):
+        return f"Rating {self.rating} for {self.answer.id} by {self.user.username}"
 
 class Degree(models.Model):
     id = models.AutoField(primary_key=True  )
@@ -136,6 +168,26 @@ class PhoneConsultationLawyer(models.Model):
     location = models.CharField(max_length=75, blank=False)
     subject = models.CharField(max_length=1000, blank=False)
     # lawyer_id = models.ForeignKey('my_users.Lawyer', on_delete=models.CASCADE)
+
+
+
+##################################################################################################
+##################################################################################################
+##################################################################################################
+
+
+# class ScrapedQuestion(models.Model):
+#     question_title = models.CharField(max_length=64)
+#     question_text = models.TextField()
+#     question_date = models.DateTimeField()
+#     question_url = models.CharField(max_length=64)
+#
+# class ScrapedAnswer(models.Model):
+#     answer_text = models.TextField()
+#     answer_date = models.DateTimeField()
+#     answer_lawyer = models.CharField(max_length=64)
+#     answer_rate = models.FloatField()
+#     question = models.ForeignKey(ScrapedQuestion, on_delete=models.CASCADE, related_name='scraped_answers')
 
 
 

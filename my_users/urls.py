@@ -15,6 +15,7 @@ urlpatterns = [
     path('userAskedQusetion/<int:question_pk>', userView.user_question, name='userAskedQuestionPage'),
     path('editUserQuestion/<int:question_pk>', userView.edit_question, name='editQuestionPage'),
     path('deleteUserQuestion/<int:question_pk>', userView.delete_question, name='deleteQuestion'),
+    path("rate_answer/<int:answer_pk>/", userView.rate_answer, name="rate_answer"),
     path('dashboard/', coreView.user_dashboard, name='dashboard'),
 
     path('dashboard/inPersonConsultation', coreView.in_person_consultation, name='inPersonCon'),
